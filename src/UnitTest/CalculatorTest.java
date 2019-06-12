@@ -40,5 +40,10 @@ public class CalculatorTest {
 		assertEquals(1L, Calculator.add("1,\n"));
 	}
 	
+	// 3. Test customized delimiter at the first line of the string
+	@Test
+	public void returnSumOnCustomizedDelimiter() {
+		assertEquals(3L, Calculator.add("//;\n1;2"));
+	}
 }
 

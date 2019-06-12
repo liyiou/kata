@@ -7,7 +7,7 @@ public class Calculator {
 
 	public static Object add(String string) {
 		
-		String[] in = string.trim().split(",");
+		String[] in = string.trim().split("[,\n]");
 		
 		List<Long> nums = new ArrayList<Long>();
 		

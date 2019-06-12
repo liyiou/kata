@@ -2,29 +2,40 @@ package StringCalculator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Calculator {
 
 	public static Object add(String string) throws Exception {
 		
 		// Parse the optional delimiter
-		boolean delimDetected = false;
-		char delim = 0;
-		int idx = string.indexOf("\n");
-		
-		if (idx != -1) {
-			String head = string.substring(0, idx);
-			if (head.length() == 3 && head.charAt(0) == '/' && head.charAt(1) == '/') {
-				delimDetected = true;
-				delim = head.charAt(2);
-			}
-		}
-		
+		String delim = null;
 		String[] in = null;
 		
-		if (delimDetected) {
-			// Parse by customized delimiter
-			in = string.substring(string.indexOf("\n")).trim().split(Character.toString(delim));
+		if (string.startsWith("//")) {
+			Matcher m = Pattern.compile("\\/\\/(.*)\n(.*)").matcher(string);
+			m.find();
+			delim = m.group(1);
+			// Strip the enclosing "[]" in delimiter -- to reconcile with requirement #4 ...delimiter looks like this: “//[delimiter]\n[numbers…]” for example “//;\n1;2” ...
+			if (delim.length() >=2 && delim.charAt(0) == '[' && delim.charAt(delim.length()-1) == ']') {
+				delim = delim.substring(1, delim.length() - 1);  
+			} 
+			
+			if (delim.isEmpty()) {
+				throw new Exception("Empty delimiter is not allowed.");
+			} else {
+				// Use the entire string literal as the delimiter
+				StringBuilder sb = new StringBuilder();
+				for (char x : delim.toCharArray()) {
+					sb.append('[');
+					sb.append(x);
+					sb.append(']');
+				}
+				delim = sb.toString();
+				String y = m.group(2);
+				in = y.split(delim);
+			}
 		} else {
 			// Parse by default delimiters (comma or new line) 
 			in = string.trim().split("[,\n]");
@@ -36,7 +47,12 @@ public class Calculator {
 			if (s.trim().length() == 0) {
 				continue;
 			}
-			long x = Long.parseLong(s.trim());
+			long x = 0;
+			try {
+				x = Long.parseLong(s.trim());
+			} catch (NumberFormatException e) {
+				throw new Exception("Illegal number format detected in inputs: " + s.trim());
+			}
 			if (x < 0) {
 				negs.add(x);
 			} else {

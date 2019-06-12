@@ -64,5 +64,41 @@ public class CalculatorTest {
 		assertEquals(2L, Calculator.add("2, 1001"));
 	}
 	
+	// 6. Delimiters can be of any length with the following format: “//[delimiter]\n” 
+	@Test
+	public void delimiterCanBeOfAnyLength() throws Exception {
+		assertEquals(6L, Calculator.add("//[***]\n1***2***3"));
+	}
+	
+	@Test
+	public void delimiterCanBeOfAnyLengthDiffChar() throws Exception {
+		try {
+			Calculator.add("//[*&*]\n1*&*2**3");
+			fail("Number format exception expected.");
+		} catch (Exception e) {
+			assertThat(e.getMessage(), is("Illegal number format detected in inputs: 2**3"));
+		}
+	}
+	
+	@Test
+	public void emptyDelimiterIsNotAllowed() throws Exception {
+		try {
+			Calculator.add("//\n1*&*2**3");
+			fail("Number format exception expected.");
+		} catch (Exception e) {
+			assertThat(e.getMessage(), is("Empty delimiter is not allowed."));
+		}
+	}
+	
+	@Test
+	public void emptyDelimiterEnclosedByBracketIsNotAllowed() throws Exception {
+		try {
+			Calculator.add("//[]\n1*&*2**3");
+			fail("Number format exception expected.");
+		} catch (Exception e) {
+			assertThat(e.getMessage(), is("Empty delimiter is not allowed."));
+		}
+	}
+	
 }
 

@@ -57,5 +57,12 @@ public class CalculatorTest {
 			assertThat(e.getMessage(), is("Negative not allowed : -1 -3"));
 		}
 	}
+	
+	// 5. Ignore input bigger than 1000
+	@Test
+	public void ignoreInputBiggerThan1000() throws Exception {
+		assertEquals(2L, Calculator.add("2, 1001"));
+	}
+	
 }
 

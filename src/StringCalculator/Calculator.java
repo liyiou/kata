@@ -40,7 +40,9 @@ public class Calculator {
 			if (x < 0) {
 				negs.add(x);
 			} else {
-				nums.add(x);
+				if (x <= 1000) {
+					nums.add(x);
+				}
 			}
 		}
 		

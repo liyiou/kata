@@ -3,12 +3,9 @@ package StringCalculator;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
 public class Calculator {
 
-	@SuppressWarnings("deprecation")
-	public static Object add(String string) {
+	public static Object add(String string) throws Exception {
 		
 		// Parse the optional delimiter
 		boolean delimDetected = false;
@@ -34,13 +31,25 @@ public class Calculator {
 		}
 		
 		List<Long> nums = new ArrayList<Long>();
-		
+		List<Long> negs = new ArrayList<Long>();
 		for (String s : in) {
 			if (s.trim().length() == 0) {
 				continue;
 			}
 			long x = Long.parseLong(s.trim());
-			nums.add(x);
+			if (x < 0) {
+				negs.add(x);
+			} else {
+				nums.add(x);
+			}
+		}
+		
+		if (! negs.isEmpty()) {
+			StringBuilder sb = new StringBuilder();
+			for (long x : negs) {
+				sb.append(" " + x);
+			}
+			throw new Exception("Negative not allowed :" + sb.toString());
 		}
 		
 		long ans = 0;

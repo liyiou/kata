@@ -25,12 +25,14 @@ public class CalculatorTest {
 		assertEquals(27L, Calculator.add("13, 14"));
 	}
 	
+	// 2. Allow unknow amount of numbers
+	
 	@Test
 	public void returnSumOnMultipleInputs() throws Exception {
 		assertEquals(10L, Calculator.add("1, 2, 3, 4"));	
 	}
 	
-	// 2. Test calculator to handle new lines between numbers, e.g. "1\n2,3"
+	// 3. Test calculator to handle new lines between numbers, e.g. "1\n2,3"
 	@Test
 	public void returnSumOnNewlineSeparatedInputs() throws Exception {
 		assertEquals(6L, Calculator.add("1\n2,3"));
@@ -41,13 +43,13 @@ public class CalculatorTest {
 		assertEquals(1L, Calculator.add("1,\n"));
 	}
 	
-	// 3. Test customized delimiter at the first line of the string
+	// 4. Test customized delimiter at the first line of the string
 	@Test
 	public void returnSumOnCustomizedDelimiter() throws Exception {
 		assertEquals(3L, Calculator.add("//;\n1;2"));
 	}
 	
-	// 4. Calling Add with a negative number will throw an exception “negatives not allowed” 
+	// 5. Calling Add with a negative number will throw an exception “negatives not allowed” 
 	@Test
 	public void throwExceptionOnNegativeInputs() {
 		try {
@@ -58,13 +60,13 @@ public class CalculatorTest {
 		}
 	}
 	
-	// 5. Ignore input bigger than 1000
+	// 6. Ignore input bigger than 1000
 	@Test
 	public void ignoreInputBiggerThan1000() throws Exception {
 		assertEquals(2L, Calculator.add("2, 1001"));
 	}
 	
-	// 6. Delimiters can be of any length with the following format: “//[delimiter]\n” 
+	// 7. Delimiters can be of any length with the following format: “//[delimiter]\n” 
 	@Test
 	public void delimiterCanBeOfAnyLength() throws Exception {
 		assertEquals(6L, Calculator.add("//[***]\n1***2***3"));
@@ -98,6 +100,12 @@ public class CalculatorTest {
 		} catch (Exception e) {
 			assertThat(e.getMessage(), is("Empty delimiter is not allowed."));
 		}
+	}
+	
+	// 8. Allow multiple delimiters like this: “//[delim1][delim2]\n” 
+	@Test
+	public void multipleDelimiters() throws Exception {
+		assertEquals(6L, Calculator.add("//[*][%]\n1*2%3"));
 	}
 	
 }

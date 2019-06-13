@@ -2,10 +2,20 @@ package StringCalculator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Calculator {
+	
+	public static boolean isSingleCharDelim(List<String> in) {
+		for (String x : in) {
+			if (x.length() > 1) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	public static String stripBracket(String in) {
 		if (in.charAt(0) != '[' || in.charAt(in.length() - 1) != ']') {
@@ -64,16 +74,39 @@ public class Calculator {
 					sb.append(']');
 				}
 				delim = sb.toString();
-			} else {
+				in = y.split(delim);
+				
+			} else if (isSingleCharDelim(delims)) {
 				// For #8 Allow multiple delimiters like this: “//[delim1][delim2]\n”
 				sb.append("[");
 				for (String z : delims) {
 					sb.append(z);
 				}
 				sb.append("]");
+				delim = sb.toString();
+				in = y.split(delim);
+			
+			} else {
+				// For #9 handle multiple delimiters with length longer than one char
+				// e.g. "//[***][%%&]\n1***2%%&3"
+				boolean first = true;
+				for (String z : delims) {
+					if (first) {
+						first = false;
+					} else {
+						sb.append("|");
+					}
+					sb.append(z);
+				}
+				delim = sb.toString();
+				StringTokenizer st = new StringTokenizer(y, delim);
+				List<String> xx = new ArrayList<String>();
+				while(st.hasMoreTokens()) {
+					xx.add(st.nextToken());
+				}
+				in = xx.toArray(new String[xx.size()]);
 			}
-			delim = sb.toString();
-			in = y.split(delim);
+			
 			
 		} else {
 			// Parse by default delimiters (comma or new line) 

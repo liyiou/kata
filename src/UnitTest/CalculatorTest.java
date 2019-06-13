@@ -108,5 +108,10 @@ public class CalculatorTest {
 		assertEquals(6L, Calculator.add("//[*][%]\n1*2%3"));
 	}
 	
+	// 9. Also handle multiple delimiters with length longer than one char
+	@Test
+	public void multipleDelimitersWithMultipleChars() throws Exception {
+		assertEquals(6L, Calculator.add("//[***][%%&]\n1***2%%&3"));
+	}
 }
 
